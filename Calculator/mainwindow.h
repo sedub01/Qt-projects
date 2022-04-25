@@ -21,6 +21,7 @@ public:
 private:
     Ui::MainWindow *ui;
     double firstNum;
+    double eps = 1e-6;
 
 private slots:
     void digitsNumbers();
@@ -32,5 +33,6 @@ private slots:
     void switchTable();
     void setConstants();
     void shortOperations();
+    void on_pushButton_second_clicked();
 };
 #endif // MAINWINDOW_H

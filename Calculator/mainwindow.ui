@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
+    <width>299</width>
     <height>456</height>
    </rect>
   </property>
@@ -470,13 +470,12 @@ QPushButton:pressed {
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QLabel 
-{
-qproperty-alignment: 'AlignVCenter | AlignLeft';
- qproperty-wordWrap: true;
- border-bottom: 1px solid gray
-}
-background-color : white;</string>
+     <string notr="true">QLabel{
+background-color : white;
+border-bottom: 1px solid gray;
+qproperty-alignment: 'AlignRight';
+qproperty-wordWrap: true;
+}</string>
     </property>
     <property name="text">
      <string>0</string>
