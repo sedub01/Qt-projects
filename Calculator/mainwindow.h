@@ -34,5 +34,7 @@ private slots:
     void setConstants();
     void shortOperations();
     void on_pushButton_second_clicked();
+    void on_pushButton_degrad_clicked();
+    void trigonometricFunctions();
 };
 #endif // MAINWINDOW_H

@@ -35,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_ln, SIGNAL(clicked()), this, SLOT(shortOperations()));
     connect(ui->pushButton_lg, SIGNAL(clicked()), this, SLOT(shortOperations()));
     connect(ui->pushButton_pow, SIGNAL(clicked()), this, SLOT(basicMathOperations()));
+    connect(ui->pushButton_sin, SIGNAL(clicked()), this, SLOT(trigonometricFunctions()));
+    connect(ui->pushButton_cos, SIGNAL(clicked()), this, SLOT(trigonometricFunctions()));
+    connect(ui->pushButton_tan, SIGNAL(clicked()), this, SLOT(trigonometricFunctions()));
 
 
     ui->pushButton_mult->setCheckable(true);
@@ -266,9 +269,9 @@ void MainWindow::shortOperations(){
 
 void MainWindow::on_pushButton_second_clicked(){
     if (ui->pushButton_second->isChecked()){
-        ui->pushButton_sin->setText("sin^-1");
-        ui->pushButton_cos->setText("cos^-1");
-        ui->pushButton_tan->setText("tan^-1");
+        ui->pushButton_sin->setText("sin⁻¹");
+        ui->pushButton_cos->setText("cos⁻¹");
+        ui->pushButton_tan->setText("tan⁻¹");
         ui->pushButton_degrad->setEnabled(false);
     }
     else{
@@ -277,5 +280,37 @@ void MainWindow::on_pushButton_second_clicked(){
         ui->pushButton_tan->setText("tan");
         ui->pushButton_degrad->setEnabled(true);
     }
+}
+
+void MainWindow::on_pushButton_degrad_clicked()
+{
+    if (ui->pushButton_degrad->text() == "deg"){
+        ui->pushButton_second->setEnabled(false);
+        ui->pushButton_degrad->setText("rad");
+    }
+    else {
+        ui->pushButton_second->setEnabled(true);
+        ui->pushButton_degrad->setText("deg");
+    }
+}
+
+//надо потом сделать так, чтобы калькулятор обрабатывал тригонометрические ф-ии
+//и адаптировать под это остальные операции (del, = и тд)
+void MainWindow::trigonometricFunctions(){
+    QPushButton *button = (QPushButton*)sender();
+    QString numbers = ui->result_label->text();
+    if (numbers == "0") numbers = "";
+    if (button->text() == "sin")
+        ui->result_label->setText(numbers + "sin(");
+    else if (button->text() == "sin⁻¹")
+        ui->result_label->setText(numbers + "arcsin(");
+    else if (button->text() == "cos")
+        ui->result_label->setText(numbers + "cos(");
+    else if (button->text() == "cos⁻¹")
+        ui->result_label->setText(numbers + "arcsin(");
+    else if (button->text() == "tan")
+        ui->result_label->setText(numbers + "tan(");
+    else if (button->text() == "tan⁻¹")
+        ui->result_label->setText(numbers + "arctan(");
 }
 
