@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_sin, SIGNAL(clicked()), this, SLOT(trigonometricFunctions()));
     connect(ui->pushButton_cos, SIGNAL(clicked()), this, SLOT(trigonometricFunctions()));
     connect(ui->pushButton_tan, SIGNAL(clicked()), this, SLOT(trigonometricFunctions()));
+    connect(ui->pushButton_leftBracket, SIGNAL(clicked()), this, SLOT(putBrackets()));
+    connect(ui->pushButton_rightBracket, SIGNAL(clicked()), this, SLOT(putBrackets()));
 
 
     ui->pushButton_mult->setCheckable(true);
@@ -112,7 +114,8 @@ void MainWindow::basicMathOperations(){
 
 void MainWindow::on_pushButton_equal_clicked()
 {
-    double labelNumber = 0, secondNum = ui->result_label->text().toDouble();
+    QString text = ui->result_label->text();
+    double labelNumber = 0, secondNum = text.toDouble();
 
     if(ui->pushButton_plus->isChecked()){
         labelNumber = firstNum + secondNum;
@@ -138,7 +141,43 @@ void MainWindow::on_pushButton_equal_clicked()
         labelNumber = pow(firstNum, secondNum);
         ui->pushButton_pow->setChecked(false);
     }
+
+    if (text.contains("arcsin")){
+        secondNum = text.split("(").last().split(")").first().toDouble();
+        if(abs(secondNum) > 1) QMessageBox::critical(this, "Ошибка", "Значение должно находиться в диапазоне [-1; 1]!");
+        else labelNumber = asin(secondNum) * 180 / M_PI;
+    }
+    else if (text.contains("arccos")){
+        secondNum = text.split("(").last().split(")").first().toDouble();
+        if(abs(secondNum) > 1) QMessageBox::critical(this, "Ошибка", "Значение должно находиться в диапазоне [-1; 1]!");
+        else labelNumber = acos(secondNum) * 180 / M_PI;
+    }
+    else if (text.contains("arctan")){
+        secondNum = text.split("(").last().split(")").first().toDouble();
+        labelNumber = atan(secondNum) * 180 / M_PI;
+    }
+    else if (text.contains("sin")){
+        secondNum = text.split("(").last().split(")").first().toDouble();
+        if (ui->pushButton_degrad->text() == "deg")
+            labelNumber = sin(secondNum * M_PI / 180);
+        else labelNumber = sin(secondNum);
+    }
+    else if (text.contains("cos")){
+        secondNum = text.split("(").last().split(")").first().toDouble();
+        if (ui->pushButton_degrad->text() == "deg")
+            labelNumber = cos(secondNum * M_PI / 180);
+        else labelNumber = cos(secondNum);
+    }
+    else if (text.contains("tan")){
+        secondNum = text.split("(").last().split(")").first().toDouble();
+        if (ui->pushButton_degrad->text() == "deg")
+            labelNumber = tan(secondNum * M_PI / 180);
+        else labelNumber = tan(secondNum);
+    }
+    if (abs(labelNumber) < eps) labelNumber = 0;
+
     ui->result_label->setText(QString::number(labelNumber, 'g', 10));
+    if (labelNumber > inf) ui->result_label->setText("∞");
 }
 
 void MainWindow::switchTable(){
@@ -307,10 +346,16 @@ void MainWindow::trigonometricFunctions(){
     else if (button->text() == "cos")
         ui->result_label->setText(numbers + "cos(");
     else if (button->text() == "cos⁻¹")
-        ui->result_label->setText(numbers + "arcsin(");
+        ui->result_label->setText(numbers + "arccos(");
     else if (button->text() == "tan")
         ui->result_label->setText(numbers + "tan(");
     else if (button->text() == "tan⁻¹")
         ui->result_label->setText(numbers + "arctan(");
 }
 
+void MainWindow::putBrackets(){
+    QPushButton *button = (QPushButton*)sender();
+    QString temp = ui->result_label->text();
+
+    ui->result_label->setText(temp + button->text());
+}

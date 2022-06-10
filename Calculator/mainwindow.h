@@ -22,6 +22,7 @@ private:
     Ui::MainWindow *ui;
     double firstNum;
     double eps = 1e-6;
+    double inf = 10e14;
 
 private slots:
     void digitsNumbers();
@@ -36,5 +37,6 @@ private slots:
     void on_pushButton_second_clicked();
     void on_pushButton_degrad_clicked();
     void trigonometricFunctions();
+    void putBrackets();
 };
 #endif // MAINWINDOW_H
