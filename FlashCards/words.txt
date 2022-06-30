@@ -22,6 +22,7 @@ hollow - пустой
 toddler - ребенок, начинающий ходить
 evaluate - оценивать
 bulge - выпуклость, выступ
+onboarding - адаптация
 lair - логово
 sewer - канализация
 junction - перекресток
@@ -56,3 +57,11 @@ vow - клятва
 repulsive - отталкивающий, отвратительный
 tremendous - потрясающий
 dignity - достоинство, благородство
+mocked - высмеянный
+fleas - блохи
+crest - герб
+mayhem - погром
+sophomore - второкурсник
+strain - напряжение
+vast - огромный
+boundary - граница

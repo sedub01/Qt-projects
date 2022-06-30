@@ -55,11 +55,6 @@
       </property>
       <item>
        <property name="text">
-        <string>2</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
         <string>15</string>
        </property>
       </item>

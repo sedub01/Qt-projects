@@ -31,6 +31,8 @@ private:
     vector<QString> wordArray;
     //массив индексов для избежания повторений
     vector<int> randomInputs;
+    //массив для заполнения уникальными числами
+    bool *numz;
     //словарный массив
     QString **dictArray;
 
@@ -40,7 +42,7 @@ private:
 public slots:
     void slot(QString a);
 private slots:
-    void on_pushButton_clicked();
+    void gotoTheNextQuestion();
 signals:
     void gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs, QString **dictArray);
 };

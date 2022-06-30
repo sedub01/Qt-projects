@@ -10,7 +10,9 @@ AnswerForm::AnswerForm(QWidget *parent) :
 {
     ui->setupUi(this);
     std::srand(std::time(nullptr));
-    //конструктор вызывается единожды
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(gotoTheNextQuestion()));
+    connect(ui->plainTextEdit, SIGNAL(returnPressed()), this, SLOT(gotoTheNextQuestion()));
+    //конструктор, slot(), прочтение файла и запись в массив вызываются единожды
 }
 
 AnswerForm::~AnswerForm()
@@ -19,30 +21,38 @@ AnswerForm::~AnswerForm()
     for (int i = 0; i < dictSize; i++) delete dictArray[i];
     delete dictArray;
     delete selfTestForm;
+    delete[] numz;
 }
 
 void AnswerForm::slot(QString a)
 {
-    //слот тоже вызывается один раз
     readFile();
     N = a.toInt();
     //все это заполняется здесь, а не в конструкторе, т.к. там N=0
     wordArray.reserve(N);
     randomInputs.reserve(N);
+    numz = new bool[dictSize]{false, };
+
+    ui->plainTextEdit->setFocus();
     inputWords();
 }
 
 void AnswerForm::inputWords(){
     ui->wordCountLabel->setText("Слова: " + QString::number(index) + "/" + QString::number(N));
 
-    int random = std::rand() % dictSize;
-    for (int i = 0; i < index; i++)
-        if (random == randomInputs[i])
-            while (random == randomInputs[i])
-                random = std::rand() % dictSize;
-    randomInputs.push_back(random);
+    int random;
+//  randomInputs.push_back(std::rand() % dictSize); - вариант с повторениями
 
-    ui->guessWordLabel->setText(QString::number(index) + ". Переведите слово \"" + dictArray[randomInputs[index-1]][0] + "\": ");
+    while(true){
+        random = std::rand() % dictSize;
+        if(!numz[random]){
+            numz[random] = true;
+            randomInputs.push_back(random);
+            break;
+        }
+    }
+
+    ui->guessWordLabel->setText(QString::number(index) + ". Переведите \"" + dictArray[randomInputs[index-1]][0] + "\": ");
 }
 
 void AnswerForm::readFile()
@@ -68,29 +78,27 @@ void AnswerForm::readFile()
         dictArray[i][0] = bufferArray.at(0).trimmed();
         dictArray[i][1] = bufferArray.at(1).trimmed();
     }
-    //прочтение файла и запись в массив происходит единожды
 }
 
 int countNumberOfStrings(char filePath[]){
     int n = 0;
     FILE* myfile = fopen(filePath, "r+");
     char buffer[100];
-    while (fgets(buffer, 100, myfile)) n++; //ok
+    while (fgets(buffer, 100, myfile)) n++;
     fclose(myfile);
     return n;
 }
 
-void AnswerForm::on_pushButton_clicked()
+void AnswerForm::gotoTheNextQuestion()
 {
-    if (ui->plainTextEdit->toPlainText() != nullptr){
-        wordArray.push_back(ui->plainTextEdit->toPlainText());
+    if (ui->plainTextEdit->text() != nullptr){
+        wordArray.push_back(ui->plainTextEdit->text());
         index++;
         ui->plainTextEdit->clear();
         if (index <= N)
             inputWords();
         else{
             ui->plainTextEdit->hide();
-            //ui->pushButton->hide(); // скорее, не спрятать, а сделать переход к след. форме
             ui->wordCountLabel->hide();
             ui->guessWordLabel->setText("Теперь переходим к проверке");
         }

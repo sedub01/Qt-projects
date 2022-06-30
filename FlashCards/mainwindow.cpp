@@ -18,16 +18,14 @@ MainWindow::~MainWindow()
     delete choosecountform; //answerform удаляется внутри него
 }
 
-
 void MainWindow::on_playButton_clicked()
 {
     AnswerForm *answerform = new AnswerForm(this);
     SelfTestForm *selfTestForm = new SelfTestForm(this);
     choosecountform = new ChoosecountForm(this);
+
     answerform->addForm(selfTestForm);
     choosecountform->addForm(answerform); //добавление answerForm, чтобы показать форму позже
     ui->centralwidget->hide();
     choosecountform->show();
 }
-
-
