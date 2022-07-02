@@ -65,3 +65,5 @@ sophomore - второкурсник
 strain - напряжение
 vast - огромный
 boundary - граница
+fad - прихоть
+chore - работа по дому

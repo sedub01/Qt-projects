@@ -57,36 +57,27 @@ void AnswerForm::inputWords(){
 
 void AnswerForm::readFile()
 {
-    char filePath[] = "C:\\Users\\sedub01\\Desktop\\FlashCards\\words.txt";
+    char filePath[] = ":/text/words.txt";
     QFile file(filePath); // создаем объект класса QFile (да, только полным именем)
     QByteArray data; // Создаем объект класса QByteArray, куда мы будем считывать данные
     if (!file.open(QIODevice::ReadOnly)){ // Проверяем, возможно ли открыть наш файл для чтения
         QMessageBox::critical(this, "Ошибка", "Ты че бля, где файл?\nВведи полное имя файла");
         exit(0);
     }
-    data = file.readAll();
+    data = file.readAll();    
     file.close();
 
-    dictSize = countNumberOfStrings(filePath);
+    dictSize = data.count("\n") + 1;
 
     dictArray = new QString*[dictSize];
     for (int i = 0; i < dictSize; i++) dictArray[i] = new QString[2];
-    QList<QByteArray> temp = data.split('\n'); //содержится одна строка, ее надо разделить
-    for (int i = 0; i < dictSize; i++){
-        QByteArray bufferString = temp.takeFirst();
-        QStringList bufferArray = QString::fromStdString(bufferString.toStdString()).split(" - ");
+    int i = 0;
+    for (QByteArray temp : data.split('\n')){
+        QStringList bufferArray = QString::fromStdString(temp.toStdString()).split(" - ");
         dictArray[i][0] = bufferArray.at(0).trimmed();
         dictArray[i][1] = bufferArray.at(1).trimmed();
+        i++;
     }
-}
-
-int countNumberOfStrings(char filePath[]){
-    int n = 0;
-    FILE* myfile = fopen(filePath, "r+");
-    char buffer[100];
-    while (fgets(buffer, 100, myfile)) n++;
-    fclose(myfile);
-    return n;
 }
 
 void AnswerForm::gotoTheNextQuestion()

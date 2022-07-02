@@ -10,8 +10,6 @@ namespace Ui {
 class AnswerForm;
 }
 
-int countNumberOfStrings(char filePath[]);
-
 class AnswerForm : public QWidget
 {
     Q_OBJECT
