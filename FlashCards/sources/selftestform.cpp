@@ -1,5 +1,5 @@
 #include <QMessageBox>
-#include "selftestform.h"
+#include "headers/selftestform.h"
 #include "ui_selftestform.h"
 
 SelfTestForm::SelfTestForm(QWidget *parent) :

@@ -9,23 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    answerform.cpp \
-    choosecountform.cpp \
+    sources/answerform.cpp \
+    sources/choosecountform.cpp \
     main.cpp \
-    mainwindow.cpp \
-    selftestform.cpp
+    sources/mainwindow.cpp \
+    sources/selftestform.cpp
 
 HEADERS += \
-    answerform.h \
-    choosecountform.h \
-    mainwindow.h \
-    selftestform.h
+    headers/answerform.h \
+    headers/choosecountform.h \
+    headers/mainwindow.h \
+    headers/selftestform.h
 
 FORMS += \
-    answerform.ui \
-    choosecountform.ui \
-    mainwindow.ui \
-    selftestform.ui
+    forms/answerform.ui \
+    forms/choosecountform.ui \
+    forms/mainwindow.ui \
+    forms/selftestform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
