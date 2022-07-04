@@ -1,7 +1,9 @@
 #ifndef SELFTESTFORM_H
 #define SELFTESTFORM_H
 
+//#include "mainwindow.h"
 #include <QWidget>
+class MainWindow;
 
 namespace Ui {
 class SelfTestForm;
@@ -15,9 +17,11 @@ class SelfTestForm : public QWidget
 public:
     explicit SelfTestForm(QWidget *parent = nullptr);
     ~SelfTestForm();
+    void addForm(MainWindow*);
 
 private:
     Ui::SelfTestForm *ui;
+    MainWindow *mainWindow;
     int yesCount = 0, noCount = 0, index = 1;
 
     vector<QString> wordArray;

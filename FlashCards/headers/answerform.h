@@ -3,6 +3,8 @@
 
 #include "selftestform.h"
 #include <QWidget>
+#include <QAudioOutput>
+#include <QMediaPlayer>
 #include <vector>
 
 using std::vector;
@@ -34,6 +36,11 @@ private:
     //словарный массив
     QString **dictArray;
 
+    int random;
+
+    QAudioOutput *audioOutput;
+    QMediaPlayer *player;
+
     void inputWords();
     void readFile();
 
@@ -41,6 +48,8 @@ public slots:
     void slot(QString a);
 private slots:
     void gotoTheNextQuestion();
+    void on_speakerButton_clicked();
+
 signals:
     void gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs, QString **dictArray);
 };

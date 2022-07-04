@@ -10,6 +10,11 @@ AnswerForm::AnswerForm(QWidget *parent) :
 {
     ui->setupUi(this);
     std::srand(std::time(nullptr));
+    audioOutput = new QAudioOutput(this);
+    player = new QMediaPlayer(this);
+    player->setAudioOutput(audioOutput);
+    audioOutput->setVolume(50);
+
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(gotoTheNextQuestion()));
     connect(ui->plainTextEdit, SIGNAL(returnPressed()), this, SLOT(gotoTheNextQuestion()));
     //конструктор, slot(), прочтение файла и запись в массив вызываются единожды
@@ -21,7 +26,10 @@ AnswerForm::~AnswerForm()
     for (int i = 0; i < dictSize; i++) delete dictArray[i];
     delete dictArray;
     delete selfTestForm;
+    selfTestForm = nullptr;
     delete[] numz;
+    delete audioOutput;
+    delete player;
 }
 
 void AnswerForm::slot(QString a)
@@ -38,11 +46,9 @@ void AnswerForm::slot(QString a)
 }
 
 void AnswerForm::inputWords(){
+
+
     ui->wordCountLabel->setText("Слова: " + QString::number(index) + "/" + QString::number(N));
-
-    int random;
-//  randomInputs.push_back(std::rand() % dictSize); - вариант с повторениями
-
     while(true){
         random = std::rand() % dictSize;
         if(!numz[random]){
@@ -53,6 +59,8 @@ void AnswerForm::inputWords(){
     }
 
     ui->guessWordLabel->setText(QString::number(index) + ". Переведите \"" + dictArray[randomInputs[index-1]][0] + "\": ");
+
+
 }
 
 void AnswerForm::readFile()
@@ -91,6 +99,7 @@ void AnswerForm::gotoTheNextQuestion()
         else{
             ui->plainTextEdit->hide();
             ui->wordCountLabel->hide();
+            ui->speakerButton->hide();
             ui->guessWordLabel->setText("Теперь переходим к проверке");
         }
     }
@@ -107,5 +116,13 @@ void AnswerForm::gotoTheNextQuestion()
 
 void AnswerForm::addForm(SelfTestForm* selfTestForm){
     this->selfTestForm = selfTestForm;
+}
+
+
+void AnswerForm::on_speakerButton_clicked() //speaker должен знать значение random'а
+{
+    QString source = "qrc:/pronouncings/pronouncings/" + QString::number(random + 1) + ".mp3";
+    player->setSource(QUrl(source)); //не устанавливается
+    player->play();
 }
 

@@ -2,8 +2,82 @@
     <qresource prefix="/img">
         <file>img/mainIcon.png</file>
         <file>img/toplabel.png</file>
+        <file>img/speaker.png</file>
     </qresource>
     <qresource prefix="/text">
         <file>words.txt</file>
+    </qresource>
+    <qresource prefix="/pronouncings">
+        <file>pronouncings/1.mp3</file>
+        <file>pronouncings/2.mp3</file>
+        <file>pronouncings/3.mp3</file>
+        <file>pronouncings/4.mp3</file>
+        <file>pronouncings/5.mp3</file>
+        <file>pronouncings/6.mp3</file>
+        <file>pronouncings/7.mp3</file>
+        <file>pronouncings/8.mp3</file>
+        <file>pronouncings/9.mp3</file>
+        <file>pronouncings/10.mp3</file>
+        <file>pronouncings/11.mp3</file>
+        <file>pronouncings/12.mp3</file>
+        <file>pronouncings/13.mp3</file>
+        <file>pronouncings/14.mp3</file>
+        <file>pronouncings/15.mp3</file>
+        <file>pronouncings/16.mp3</file>
+        <file>pronouncings/17.mp3</file>
+        <file>pronouncings/18.mp3</file>
+        <file>pronouncings/19.mp3</file>
+        <file>pronouncings/20.mp3</file>
+        <file>pronouncings/21.mp3</file>
+        <file>pronouncings/22.mp3</file>
+        <file>pronouncings/23.mp3</file>
+        <file>pronouncings/24.mp3</file>
+        <file>pronouncings/25.mp3</file>
+        <file>pronouncings/26.mp3</file>
+        <file>pronouncings/27.mp3</file>
+        <file>pronouncings/28.mp3</file>
+        <file>pronouncings/29.mp3</file>
+        <file>pronouncings/30.mp3</file>
+        <file>pronouncings/31.mp3</file>
+        <file>pronouncings/32.mp3</file>
+        <file>pronouncings/33.mp3</file>
+        <file>pronouncings/34.mp3</file>
+        <file>pronouncings/35.mp3</file>
+        <file>pronouncings/36.mp3</file>
+        <file>pronouncings/37.mp3</file>
+        <file>pronouncings/38.mp3</file>
+        <file>pronouncings/39.mp3</file>
+        <file>pronouncings/40.mp3</file>
+        <file>pronouncings/41.mp3</file>
+        <file>pronouncings/42.mp3</file>
+        <file>pronouncings/43.mp3</file>
+        <file>pronouncings/44.mp3</file>
+        <file>pronouncings/45.mp3</file>
+        <file>pronouncings/46.mp3</file>
+        <file>pronouncings/47.mp3</file>
+        <file>pronouncings/48.mp3</file>
+        <file>pronouncings/49.mp3</file>
+        <file>pronouncings/50.mp3</file>
+        <file>pronouncings/51.mp3</file>
+        <file>pronouncings/52.mp3</file>
+        <file>pronouncings/53.mp3</file>
+        <file>pronouncings/54.mp3</file>
+        <file>pronouncings/55.mp3</file>
+        <file>pronouncings/56.mp3</file>
+        <file>pronouncings/57.mp3</file>
+        <file>pronouncings/58.mp3</file>
+        <file>pronouncings/59.mp3</file>
+        <file>pronouncings/60.mp3</file>
+        <file>pronouncings/61.mp3</file>
+        <file>pronouncings/62.mp3</file>
+        <file>pronouncings/63.mp3</file>
+        <file>pronouncings/64.mp3</file>
+        <file>pronouncings/65.mp3</file>
+        <file>pronouncings/66.mp3</file>
+        <file>pronouncings/67.mp3</file>
+        <file>pronouncings/68.mp3</file>
+        <file>pronouncings/69.mp3</file>
+        <file>pronouncings/70.mp3</file>
+        <file>pronouncings/71.mp3</file>
     </qresource>
 </RCC>

@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include "headers/selftestform.h"
+#include "headers/mainwindow.h"
 #include "ui_selftestform.h"
 
 SelfTestForm::SelfTestForm(QWidget *parent) :
@@ -38,7 +39,13 @@ void SelfTestForm::answer(){
     index++;
     if (index - 1 == (int)randomInputs.size()){
         QMessageBox::critical(this, "Итого", "Ваш результат: " + QString::number(yesCount) + "/" + QString::number(index - 1));
-        exit(0);//хочу осуществить переход на главное окно
+        QApplication::quit();
+//        hide();
+//        mainWindow->centralWidget()->show();
     }
     else inputAnswers();
+}
+
+void SelfTestForm::addForm(MainWindow* mainWindow){
+    this->mainWindow = mainWindow;
 }

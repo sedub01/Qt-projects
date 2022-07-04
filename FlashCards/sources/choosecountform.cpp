@@ -12,6 +12,7 @@ ChoosecountForm::~ChoosecountForm()
 {
     delete ui;
     delete answerform;
+    answerform = nullptr;
 }
 
 void ChoosecountForm::addForm(AnswerForm* answerform){

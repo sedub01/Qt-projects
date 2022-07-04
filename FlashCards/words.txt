@@ -67,3 +67,5 @@ vast - огромный
 boundary - граница
 fad - прихоть
 chore - работа по дому
+humiliated - униженный
+mustard - горчица
