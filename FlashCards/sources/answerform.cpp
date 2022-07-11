@@ -1,5 +1,6 @@
 #include <QMessageBox>
 #include <QFile>
+#include <QFileInfo>
 #include <cstdlib>
 #include "headers/answerform.h"
 #include "ui_answerform.h"
@@ -46,8 +47,6 @@ void AnswerForm::slot(QString a)
 }
 
 void AnswerForm::inputWords(){
-
-
     ui->wordCountLabel->setText("Слова: " + QString::number(index) + "/" + QString::number(N));
     while(true){
         random = std::rand() % dictSize;
@@ -59,8 +58,6 @@ void AnswerForm::inputWords(){
     }
 
     ui->guessWordLabel->setText(QString::number(index) + ". Переведите \"" + dictArray[randomInputs[index-1]][0] + "\": ");
-
-
 }
 
 void AnswerForm::readFile()
@@ -121,8 +118,19 @@ void AnswerForm::addForm(SelfTestForm* selfTestForm){
 
 void AnswerForm::on_speakerButton_clicked() //speaker должен знать значение random'а
 {
-    QString source = "qrc:/pronouncings/pronouncings/" + QString::number(random + 1) + ".mp3";
-    player->setSource(QUrl(source)); //не устанавливается
-    player->play();
+    QString path = ":/pronouncings/pronouncings/" + QString::number(random + 1) + ".mp3";
+    QFileInfo checkFile(path);
+    QString source = "qrc" + path;
+
+    if (checkFile.exists()){
+        player->setSource(QUrl(source));
+        player->play();
+    }else{
+        int tempRandom = std::rand() % 3 - 3;
+        player->setSource(QUrl("qrc:/pronouncings/pronouncings/" + QString::number(tempRandom) + ".mp3"));
+        player->play();
+        QMessageBox::critical(this, "Ошибка", "Извини, пока что нет \nзвукового сопровождения \nдля этой фразы");
+    }
+
 }
 

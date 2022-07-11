@@ -69,3 +69,4 @@ fad - прихоть
 chore - работа по дому
 humiliated - униженный
 mustard - горчица
+swallow - проглатывать
