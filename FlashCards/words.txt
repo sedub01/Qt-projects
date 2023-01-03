@@ -16,7 +16,7 @@ solitude - одиночество
 contradiction - противоречие
 turmoil - смятение
 quantity - количество
-guilt - вина (чувство вины)
+guilt - вина, чувство вины
 intrinsic - внутренний
 hollow - пустой
 toddler - ребенок, начинающий ходить
@@ -70,3 +70,34 @@ chore - работа по дому
 humiliated - униженный
 mustard - горчица
 swallow - проглатывать
+dissolve - растворить
+boilerplate - шаблонный
+retrieving - извлечение
+appraisal - оценка
+cite - цитировать, ссылаться
+decisive - решающий
+executive - исполнительный директор
+shallow - мелкий, поверхностный
+possess - владеть, обладать
+sufficient - достаточный
+loose coupling - слабая связь
+cohesion - сплоченность, связь
+redundant - лишний, избыточный
+malevolent - злобный, злорадный
+juxtaposition - сопоставление
+crimson - малиновый, пунцовый
+blissful - блаженный
+whatsoever - что угодно, что бы то ни было
+felony - уголовное преступление
+mist - туман
+urge - побуждение
+vessel - судно, сосуд
+intrude - вмешиваться, вторгаться
+burden - груз, бремя
+hone - оттачивать
+curt - краткий, односложный
+embrace - объятия
+smuggler - контрабандист
+perceive - воспринимать, чувствовать
+participate - принимать участие
+excuse - извинение, оправдание
