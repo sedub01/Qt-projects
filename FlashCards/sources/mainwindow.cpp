@@ -12,31 +12,35 @@ MainWindow::MainWindow(QWidget *parent)
     QPixmap pix(":/img/img/mainIcon.png");
     int w = ui->mainImage->width(), h = ui->mainImage->height();
     ui->mainImage->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
+    connect(ui->playButton, &QPushButton::clicked,
+            this, &MainWindow::playButtonClicked);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete choosecountform; //answerform удаляется внутри него
-    choosecountform = nullptr;
 }
 
-void MainWindow::on_playButton_clicked()
+void MainWindow::playButtonClicked()
 {
-    if (!answerform) answerform = new AnswerForm(this);
-    if (!selfTestForm) selfTestForm = new SelfTestForm(this);
-    if (!choosecountform) choosecountform = new ChoosecountForm(this);
-
-//    QAudioOutput *audioOutput = new QAudioOutput(this);
-//    QMediaPlayer *player = new QMediaPlayer();
-//    player->setAudioOutput(audioOutput);
-//    audioOutput->setVolume(50);
-//    player->setSource(QUrl("qrc:/pronouncings/pronouncings/12.mp3"));
-//    player->play();
-
-    selfTestForm->addForm(this);
-    answerform->addForm(selfTestForm);
-    choosecountform->addForm(answerform); //добавление answerForm, чтобы показать форму позже
-    ui->centralwidget->hide();
+    reinit();
     choosecountform->show();
+    ui->centralwidget->hide();
+}
+
+void MainWindow::reinit()
+{
+    if (!answerform){ //connect нужно делать только один раз
+        choosecountform = new ChoosecountForm(this);
+        answerform = new AnswerForm(this);
+        selfTestForm = new SelfTestForm(this);
+        //Виджеты могут принимать только указатель на QMainWindow, иначе никак
+
+        connect(choosecountform, &ChoosecountForm::nWordsChosen,
+                answerform, &AnswerForm::goToAnswerForm);
+        connect(answerform, &AnswerForm::gotoSelfTestForm,
+                selfTestForm, &SelfTestForm::gotoSelfTestForm);
+        connect(selfTestForm, &SelfTestForm::goToMainMenu,
+                this->centralWidget(), &QWidget::show);
+    } //mainWindow -> choosecountform -> answerform -> selfTestForm -> mainWindow
 }

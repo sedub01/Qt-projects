@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QAudioOutput>
 #include <QMediaPlayer>
+#include <QTimer>
+#include <QThread>
 #include <vector>
 
 using std::vector;
@@ -19,39 +21,35 @@ class AnswerForm : public QWidget
 public:
     explicit AnswerForm(QWidget *parent = nullptr);
     ~AnswerForm();
-    void addForm(SelfTestForm*);
 
 private:
     Ui::AnswerForm *ui;
-    SelfTestForm *selfTestForm;
 
-    int index = 1, N/*выбирается пользователем*/;
-    int dictSize;
+    int index;
     //массив введенных пользователем слов
     vector<QString> wordArray;
     //массив индексов для избежания повторений
     vector<int> randomInputs;
     //массив для заполнения уникальными числами
-    bool *numz;
-    //словарный массив
-    QString **dictArray;
-
+    QVector<bool> numz;
+    //структура, хранящая абсолютно все переводы из файла
+    QList<std::pair<QString, QString>> dictArray;
     int random;
-
-    QAudioOutput *audioOutput;
     QMediaPlayer *player;
 
     void inputWords();
     void readFile();
+    void reinit();
 
 public slots:
-    void slot(QString a);
+    void goToAnswerForm(int);
 private slots:
     void gotoTheNextQuestion();
-    void on_speakerButton_clicked();
+    void pronounceSpeaking();
 
 signals:
-    void gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs, QString **dictArray);
+    void gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs,
+                          QVector<std::pair<QString, QString>>& dictArray);
 };
 
 #endif // ANSWERFORM_H

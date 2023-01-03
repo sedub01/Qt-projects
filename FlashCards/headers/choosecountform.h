@@ -16,16 +16,13 @@ public:
     explicit ChoosecountForm(QWidget *parent = nullptr);
     ~ChoosecountForm();
 
-    void addForm(AnswerForm* answerform);
-
 private slots:
-    void on_pushButton_clicked();
+    void goToAnswerForm();
 
 private:
     Ui::ChoosecountForm *ui;
-    AnswerForm *answerform;
 signals:
-    void signal(QString);
+    void nWordsChosen(int);
 };
 
 #endif // CHOOSECOUNTFORM_H

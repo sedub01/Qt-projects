@@ -6,25 +6,18 @@ ChoosecountForm::ChoosecountForm(QWidget *parent) :
     ui(new Ui::ChoosecountForm)
 {
     ui->setupUi(this);
+    connect(ui->pushButton, &QPushButton::clicked,
+            this, &ChoosecountForm::goToAnswerForm);
 }
 
 ChoosecountForm::~ChoosecountForm()
 {
     delete ui;
-    delete answerform;
-    answerform = nullptr;
 }
 
-void ChoosecountForm::addForm(AnswerForm* answerform){
-    this->answerform = answerform;
-    connect(this, &ChoosecountForm::signal, this->answerform, &AnswerForm::slot);
-    //теперь сигнал и слот соединены друг с другом
-}
-
-void ChoosecountForm::on_pushButton_clicked()
+void ChoosecountForm::goToAnswerForm()
 {
     hide();
-    answerform->show();
-    emit signal(ui->comboBox->currentText()); //вызов сигнала и передача кол-ва слов
+    emit nWordsChosen(ui->comboBox->currentText().toInt());
 }
 

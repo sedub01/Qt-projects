@@ -17,23 +17,27 @@ class SelfTestForm : public QWidget
 public:
     explicit SelfTestForm(QWidget *parent = nullptr);
     ~SelfTestForm();
-    void addForm(MainWindow*);
 
 private:
     Ui::SelfTestForm *ui;
-    MainWindow *mainWindow;
-    int yesCount = 0, noCount = 0, index = 1;
+    int yesCount;
+    int noCount;
+    int index;
 
     vector<QString> wordArray;
     vector<int> randomInputs;
-    QString** dictArray;
+    QVector<std::pair<QString, QString>> dictArray;
 
     void inputAnswers();
+    void reinit();
 
 public slots:
-    void slot(vector<QString>& wordArray, vector<int>& randomInputs, QString **dictArray);
+    void gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs,
+                          QVector<std::pair<QString, QString>>& dictArray);
 private slots:
     void answer();
+signals:
+    void goToMainMenu();
 };
 
 #endif // SELFTESTFORM_H

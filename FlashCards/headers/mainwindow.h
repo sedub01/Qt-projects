@@ -18,7 +18,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_playButton_clicked();
+    void playButtonClicked();
 
 private:
     Ui::MainWindow *ui;
@@ -26,5 +26,7 @@ private:
     AnswerForm *answerform = nullptr;
     SelfTestForm *selfTestForm = nullptr;
     ChoosecountForm *choosecountform = nullptr;
+
+    void reinit();
 };
 #endif // MAINWINDOW_H

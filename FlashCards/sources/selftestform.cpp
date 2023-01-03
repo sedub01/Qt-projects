@@ -8,8 +8,10 @@ SelfTestForm::SelfTestForm(QWidget *parent) :
     ui(new Ui::SelfTestForm)
 {
     ui->setupUi(this);
-    connect(ui->yesButton, SIGNAL(clicked()), this, SLOT(answer()));
-    connect(ui->noButton, SIGNAL(clicked()), this, SLOT(answer()));
+    for (const auto& button: {ui->yesButton, ui->noButton}){
+        connect(button, &QPushButton::clicked,
+                this, &SelfTestForm::answer);
+    }
 }
 
 SelfTestForm::~SelfTestForm()
@@ -17,19 +19,28 @@ SelfTestForm::~SelfTestForm()
     delete ui; //больше ничего не удаляется, т.к. объект хранит в себе только указатели
 }
 
-void SelfTestForm::slot(vector<QString>& wordArray, vector<int>& randomInputs, QString **dictArray){
+void SelfTestForm::gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs,
+                                    QVector<std::pair<QString, QString> > &dictArray){
     this->wordArray = wordArray;
     this->randomInputs = randomInputs;
     this->dictArray = dictArray;
-
+    reinit();
     inputAnswers();
 }
 
 void SelfTestForm::inputAnswers()
 {
-    ui->conditionLabel->setText(QString::number(index) + ". " + dictArray[randomInputs[index - 1]][0] + "\nПравильный перевод: \"" +
-            dictArray[randomInputs[index - 1]][1] + "\" \nВы перевели его как \"" + wordArray[index-1] +
-            "\"\nПравильно ли оно переведено?");
+    ui->conditionLabel->setText(QString::number(index) + ". " +
+        dictArray.at(randomInputs[index - 1]).first + "\nПравильный перевод: \"" +
+        dictArray.at(randomInputs[index - 1]).second + "\" \nВы перевели его как \"" +
+            wordArray[index-1] + "\"\nПравильно ли оно переведено?");
+}
+
+void SelfTestForm::reinit()
+{
+    show();
+    index = 1;
+    yesCount = noCount = 0;
 }
 
 void SelfTestForm::answer(){
@@ -39,13 +50,8 @@ void SelfTestForm::answer(){
     index++;
     if (index - 1 == (int)randomInputs.size()){
         QMessageBox::critical(this, "Итого", "Ваш результат: " + QString::number(yesCount) + "/" + QString::number(index - 1));
-        QApplication::quit();
-//        hide();
-//        mainWindow->centralWidget()->show();
+        hide();
+        emit goToMainMenu();
     }
     else inputAnswers();
-}
-
-void SelfTestForm::addForm(MainWindow* mainWindow){
-    this->mainWindow = mainWindow;
 }

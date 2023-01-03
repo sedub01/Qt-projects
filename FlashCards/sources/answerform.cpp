@@ -11,45 +11,48 @@ AnswerForm::AnswerForm(QWidget *parent) :
 {
     ui->setupUi(this);
     std::srand(std::time(nullptr));
-    audioOutput = new QAudioOutput(this);
     player = new QMediaPlayer(this);
-    player->setAudioOutput(audioOutput);
-    audioOutput->setVolume(50);
+    player->setAudioOutput(new QAudioOutput(this));
 
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(gotoTheNextQuestion()));
     connect(ui->plainTextEdit, SIGNAL(returnPressed()), this, SLOT(gotoTheNextQuestion()));
+    connect(ui->speakerButton, &QPushButton::clicked, this, &AnswerForm::pronounceSpeaking);
+    for (const auto& button: {ui->speakerButton, ui->pushButton}){
+        connect(button, &QPushButton::clicked, ui->plainTextEdit, [this](){
+            ui->plainTextEdit->setFocus();
+        });
+    }
     //конструктор, slot(), прочтение файла и запись в массив вызываются единожды
 }
 
 AnswerForm::~AnswerForm()
 {
     delete ui;
-    for (int i = 0; i < dictSize; i++) delete dictArray[i];
-    delete dictArray;
-    delete selfTestForm;
-    selfTestForm = nullptr;
-    delete[] numz;
-    delete audioOutput;
-    delete player;
+    //Если объект - QObject и он принимает this, его можно не удалять
 }
 
-void AnswerForm::slot(QString a)
+void AnswerForm::goToAnswerForm(int nWords)
 {
+    show();
+    reinit();
     readFile();
-    N = a.toInt();
     //все это заполняется здесь, а не в конструкторе, т.к. там N=0
-    wordArray.reserve(N);
-    randomInputs.reserve(N);
-    numz = new bool[dictSize]{false, };
+    //reserve просто резервирует память (после вызова метода размер == 0)
+    //resize уже изменяет размер массива (т.е. размер == N)
+    wordArray.resize(nWords);
+    randomInputs.reserve(nWords);
+    numz.resize(dictArray.size());
+    numz.fill(false);
 
     ui->plainTextEdit->setFocus();
     inputWords();
 }
 
 void AnswerForm::inputWords(){
-    ui->wordCountLabel->setText("Слова: " + QString::number(index) + "/" + QString::number(N));
+    ui->wordCountLabel->setText("Слова: " + QString::number(index) +
+        "/" + QString::number(wordArray.size()));
     while(true){
-        random = std::rand() % dictSize;
+        random = std::rand() % dictArray.size();
         if(!numz[random]){
             numz[random] = true;
             randomInputs.push_back(random);
@@ -57,41 +60,47 @@ void AnswerForm::inputWords(){
         }
     }
 
-    ui->guessWordLabel->setText(QString::number(index) + ". Переведите \"" + dictArray[randomInputs[index-1]][0] + "\": ");
+    ui->guessWordLabel->setText(QString::number(index) + ". Переведите \"" +
+        dictArray.at(randomInputs[index-1]).first + "\": ");
 }
 
 void AnswerForm::readFile()
 {
     char filePath[] = ":/text/words.txt";
-    QFile file(filePath); // создаем объект класса QFile (да, только полным именем)
-    QByteArray data; // Создаем объект класса QByteArray, куда мы будем считывать данные
+    QFile file(filePath); // создаем объект класса QFile
+    QString data; // Создаем объект класса QString, куда мы будем считывать данные
     if (!file.open(QIODevice::ReadOnly)){ // Проверяем, возможно ли открыть наш файл для чтения
         QMessageBox::critical(this, "Ошибка", "Ты че бля, где файл?\nВведи полное имя файла");
         exit(0);
     }
-    data = file.readAll();    
+    data = file.readAll();
     file.close();
 
-    dictSize = data.count("\n") + 1;
-
-    dictArray = new QString*[dictSize];
-    for (int i = 0; i < dictSize; i++) dictArray[i] = new QString[2];
-    int i = 0;
-    for (QByteArray temp : data.split('\n')){
-        QStringList bufferArray = QString::fromStdString(temp.toStdString()).split(" - ");
-        dictArray[i][0] = bufferArray.at(0).trimmed();
-        dictArray[i][1] = bufferArray.at(1).trimmed();
-        i++;
+    for (const auto &stringFromFile : data.split('\n')){
+        const auto bufferArray = stringFromFile.split(" - ");
+        dictArray.append({bufferArray.at(0).trimmed(), bufferArray.at(1).trimmed()});
     }
+}
+
+void AnswerForm::reinit()
+{
+    wordArray.clear();
+    randomInputs.clear();
+    numz.clear();
+    dictArray.clear();
+    index = 1;
+    ui->plainTextEdit->show();
+    ui->wordCountLabel->show();
+    ui->speakerButton->show();
 }
 
 void AnswerForm::gotoTheNextQuestion()
 {
-    if (ui->plainTextEdit->text() != nullptr){
-        wordArray.push_back(ui->plainTextEdit->text());
+    if (!ui->plainTextEdit->text().isEmpty()){
+        wordArray[index - 1] = ui->plainTextEdit->text();
         index++;
         ui->plainTextEdit->clear();
-        if (index <= N)
+        if (index <= (int)wordArray.size())
             inputWords();
         else{
             ui->plainTextEdit->hide();
@@ -104,33 +113,34 @@ void AnswerForm::gotoTheNextQuestion()
         QMessageBox::critical(this, "Ошибка", "Здесь ничего нет!");
     else{
         hide();
-        selfTestForm->show();
-        connect(this, &AnswerForm::gotoSelfTestForm, this->selfTestForm, &SelfTestForm::slot);
-        emit gotoSelfTestForm(wordArray, randomInputs, dictArray); //отправление к слоту
+        emit gotoSelfTestForm(wordArray, randomInputs, dictArray);
         //вектор передается по ссылке
     }
 }
 
-void AnswerForm::addForm(SelfTestForm* selfTestForm){
-    this->selfTestForm = selfTestForm;
-}
-
-
-void AnswerForm::on_speakerButton_clicked() //speaker должен знать значение random'а
+void AnswerForm::pronounceSpeaking() //speaker должен знать значение random'а
 {
-    QString path = ":/pronouncings/pronouncings/" + QString::number(random + 1) + ".mp3";
-    QFileInfo checkFile(path);
+    const QString pathRegex = ":/pronouncings/pronouncings/%1.mp3";
+    const QString path = pathRegex.arg(QString::number(random + 1));
+    const QFileInfo checkFile(path);
     QString source = "qrc" + path;
 
-    if (checkFile.exists()){
-        player->setSource(QUrl(source));
-        player->play();
-    }else{
-        int tempRandom = std::rand() % 3 - 3;
-        player->setSource(QUrl("qrc:/pronouncings/pronouncings/" + QString::number(tempRandom) + ".mp3"));
-        player->play();
-        QMessageBox::critical(this, "Ошибка", "Извини, пока что нет \nзвукового сопровождения \nдля этой фразы");
+    if (!checkFile.exists()){
+        int unfoundRandom = std::rand() % 3 - 3;
+        source = "qrc" + pathRegex.arg(QString::number(unfoundRandom));
+        const auto thread = new QThread();
+        connect(thread, &QThread::started, this, [](){
+            QMessageBox msgBox;
+            msgBox.setIconPixmap(QPixmap()); //нужно, чтобы не производился системный звук
+            msgBox.setWindowTitle("Ошибка");
+            msgBox.setText("Извини, пока что нет \nзвукового сопровождения \nдля этой фразы");
+            msgBox.exec();
+        });
+        thread->start();
+        QTimer::singleShot(1, this, [thread](){
+            thread->quit();
+        });
     }
-
+    player->setSource(QUrl(source));
+    player->play();
 }
-
