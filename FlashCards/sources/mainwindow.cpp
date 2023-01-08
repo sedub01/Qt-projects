@@ -24,23 +24,23 @@ MainWindow::~MainWindow()
 void MainWindow::playButtonClicked()
 {
     reinit();
-    choosecountform->show();
+    mChoosecountForm->show();
     ui->centralwidget->hide();
 }
 
 void MainWindow::reinit()
 {
-    if (!answerform){ //connect нужно делать только один раз
-        choosecountform = new ChoosecountForm(this);
-        answerform = new AnswerForm(this);
-        selfTestForm = new SelfTestForm(this);
+    if (!mAnswerform){ //connect нужно делать только один раз
+        mChoosecountForm = new ChoosecountForm(this);
+        mAnswerform = new AnswerForm(this);
+        mSelfTestForm = new SelfTestForm(this);
         //Виджеты могут принимать только указатель на QMainWindow, иначе никак
 
-        connect(choosecountform, &ChoosecountForm::nWordsChosen,
-                answerform, &AnswerForm::goToAnswerForm);
-        connect(answerform, &AnswerForm::gotoSelfTestForm,
-                selfTestForm, &SelfTestForm::gotoSelfTestForm);
-        connect(selfTestForm, &SelfTestForm::goToMainMenu,
+        connect(mChoosecountForm, &ChoosecountForm::nWordsChosen,
+                mAnswerform, &AnswerForm::goToAnswerForm);
+        connect(mAnswerform, &AnswerForm::gotoSelfTestForm,
+                mSelfTestForm, &SelfTestForm::gotoSelfTestForm);
+        connect(mSelfTestForm, &SelfTestForm::goToMainMenu,
                 this->centralWidget(), &QWidget::show);
     } //mainWindow -> choosecountform -> answerform -> selfTestForm -> mainWindow
 }

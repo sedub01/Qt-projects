@@ -21,35 +21,36 @@ SelfTestForm::~SelfTestForm()
 
 void SelfTestForm::gotoSelfTestForm(vector<QString>& wordArray, vector<int>& randomInputs,
                                     QVector<std::pair<QString, QString> > &dictArray){
-    this->wordArray = wordArray;
-    this->randomInputs = randomInputs;
-    this->dictArray = dictArray;
+    this->mWordArray = wordArray;
+    this->mRandomInputs = randomInputs;
+    this->mDictArray = dictArray;
     reinit();
     inputAnswers();
 }
 
 void SelfTestForm::inputAnswers()
 {
-    ui->conditionLabel->setText(QString::number(index) + ". " +
-        dictArray.at(randomInputs[index - 1]).first + "\nПравильный перевод: \"" +
-        dictArray.at(randomInputs[index - 1]).second + "\" \nВы перевели его как \"" +
-            wordArray[index-1] + "\"\nПравильно ли оно переведено?");
+    ui->conditionLabel->setText(QString::number(mCurrentIndex) + ". " +
+        mDictArray.at(mRandomInputs[mCurrentIndex - 1]).first + "\nПравильный перевод: \"" +
+        mDictArray.at(mRandomInputs[mCurrentIndex - 1]).second + "\" \nВы перевели его как \"" +
+            mWordArray[mCurrentIndex-1] + "\"\nПравильно ли оно переведено?");
 }
 
 void SelfTestForm::reinit()
 {
     show();
-    index = 1;
-    yesCount = noCount = 0;
+    mCurrentIndex = 1;
+    mYCount = mNCount = 0;
 }
 
 void SelfTestForm::answer(){
-    QPushButton *button = (QPushButton*)sender();
+    const QPushButton *button = (QPushButton*)sender();
 
-    (button->text() == "Да")? yesCount++ : noCount++;
-    index++;
-    if (index - 1 == (int)randomInputs.size()){
-        QMessageBox::critical(this, "Итого", "Ваш результат: " + QString::number(yesCount) + "/" + QString::number(index - 1));
+    (button->text() == "Да")? mYCount++ : mNCount++;
+    mCurrentIndex++;
+    if (mCurrentIndex - 1 == (int)mRandomInputs.size()){
+        QMessageBox::critical(this, "Итого", "Ваш результат: " +
+            QString::number(mYCount) + "/" + QString::number(mCurrentIndex - 1));
         hide();
         emit goToMainMenu();
     }

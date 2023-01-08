@@ -11,8 +11,8 @@ AnswerForm::AnswerForm(QWidget *parent) :
 {
     ui->setupUi(this);
     std::srand(std::time(nullptr));
-    player = new QMediaPlayer(this);
-    player->setAudioOutput(new QAudioOutput(this));
+    mPlayer = new QMediaPlayer(this);
+    mPlayer->setAudioOutput(new QAudioOutput(this));
 
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(gotoTheNextQuestion()));
     connect(ui->plainTextEdit, SIGNAL(returnPressed()), this, SLOT(gotoTheNextQuestion()));
@@ -39,56 +39,56 @@ void AnswerForm::goToAnswerForm(int nWords)
     //все это заполняется здесь, а не в конструкторе, т.к. там N=0
     //reserve просто резервирует память (после вызова метода размер == 0)
     //resize уже изменяет размер массива (т.е. размер == N)
-    wordArray.resize(nWords);
-    randomInputs.reserve(nWords);
-    numz.resize(dictArray.size());
-    numz.fill(false);
+    mWordArray.resize(nWords);
+    mRandomInputs.reserve(nWords);
+    mNumz.resize(mDictArray.size());
+    mNumz.fill(false);
 
     ui->plainTextEdit->setFocus();
     inputWords();
 }
 
 void AnswerForm::inputWords(){
-    ui->wordCountLabel->setText("Слова: " + QString::number(index) +
-        "/" + QString::number(wordArray.size()));
+    ui->wordCountLabel->setText("Слова: " + QString::number(mCurrentIndex) +
+        "/" + QString::number(mWordArray.size()));
     while(true){
-        random = std::rand() % dictArray.size();
-        if(!numz[random]){
-            numz[random] = true;
-            randomInputs.push_back(random);
+        mRandomIndex = std::rand() % mDictArray.size();
+        if(!mNumz[mRandomIndex]){
+            mNumz[mRandomIndex] = true;
+            mRandomInputs.push_back(mRandomIndex);
             break;
         }
     }
 
-    ui->guessWordLabel->setText(QString::number(index) + ". Переведите \"" +
-        dictArray.at(randomInputs[index-1]).first + "\": ");
+    ui->guessWordLabel->setText(QString::number(mCurrentIndex) + ". Переведите \"" +
+        mDictArray.at(mRandomInputs[mCurrentIndex-1]).first + "\": ");
 }
 
 void AnswerForm::readFile()
 {
-    char filePath[] = ":/text/words.txt";
+    const char filePath[] = ":/text/words.txt";
     QFile file(filePath); // создаем объект класса QFile
-    QString data; // Создаем объект класса QString, куда мы будем считывать данные
     if (!file.open(QIODevice::ReadOnly)){ // Проверяем, возможно ли открыть наш файл для чтения
         QMessageBox::critical(this, "Ошибка", "Ты че бля, где файл?\nВведи полное имя файла");
         exit(0);
     }
-    data = file.readAll();
+    // Создаем объект класса QString, куда мы будем считывать данные
+    const QString data = file.readAll();
     file.close();
 
     for (const auto &stringFromFile : data.split('\n')){
         const auto bufferArray = stringFromFile.split(" - ");
-        dictArray.append({bufferArray.at(0).trimmed(), bufferArray.at(1).trimmed()});
+        mDictArray.append({bufferArray.at(0).trimmed(), bufferArray.at(1).trimmed()});
     }
 }
 
 void AnswerForm::reinit()
 {
-    wordArray.clear();
-    randomInputs.clear();
-    numz.clear();
-    dictArray.clear();
-    index = 1;
+    mWordArray.clear();
+    mRandomInputs.clear();
+    mNumz.clear();
+    mDictArray.clear();
+    mCurrentIndex = 1;
     ui->plainTextEdit->show();
     ui->wordCountLabel->show();
     ui->speakerButton->show();
@@ -97,10 +97,10 @@ void AnswerForm::reinit()
 void AnswerForm::gotoTheNextQuestion()
 {
     if (!ui->plainTextEdit->text().isEmpty()){
-        wordArray[index - 1] = ui->plainTextEdit->text();
-        index++;
+        mWordArray[mCurrentIndex - 1] = ui->plainTextEdit->text();
+        mCurrentIndex++;
         ui->plainTextEdit->clear();
-        if (index <= (int)wordArray.size())
+        if (mCurrentIndex <= (int)mWordArray.size())
             inputWords();
         else{
             ui->plainTextEdit->hide();
@@ -113,7 +113,7 @@ void AnswerForm::gotoTheNextQuestion()
         QMessageBox::critical(this, "Ошибка", "Здесь ничего нет!");
     else{
         hide();
-        emit gotoSelfTestForm(wordArray, randomInputs, dictArray);
+        emit gotoSelfTestForm(mWordArray, mRandomInputs, mDictArray);
         //вектор передается по ссылке
     }
 }
@@ -121,7 +121,7 @@ void AnswerForm::gotoTheNextQuestion()
 void AnswerForm::pronounceSpeaking() //speaker должен знать значение random'а
 {
     const QString pathRegex = ":/pronouncings/pronouncings/%1.mp3";
-    const QString path = pathRegex.arg(QString::number(random + 1));
+    const QString path = pathRegex.arg(QString::number(mRandomIndex + 1));
     const QFileInfo checkFile(path);
     QString source = "qrc" + path;
 
@@ -141,6 +141,6 @@ void AnswerForm::pronounceSpeaking() //speaker должен знать знач�
             thread->quit();
         });
     }
-    player->setSource(QUrl(source));
-    player->play();
+    mPlayer->setSource(QUrl(source));
+    mPlayer->play();
 }

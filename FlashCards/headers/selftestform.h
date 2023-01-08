@@ -20,13 +20,13 @@ public:
 
 private:
     Ui::SelfTestForm *ui;
-    int yesCount;
-    int noCount;
-    int index;
+    int mYCount;
+    int mNCount;
+    int mCurrentIndex;
 
-    vector<QString> wordArray;
-    vector<int> randomInputs;
-    QVector<std::pair<QString, QString>> dictArray;
+    vector<QString> mWordArray;
+    vector<int> mRandomInputs;
+    QVector<std::pair<QString, QString>> mDictArray;
 
     void inputAnswers();
     void reinit();

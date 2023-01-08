@@ -23,9 +23,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
     //это на тот случай, если игрок захочет играть не один раз
-    AnswerForm *answerform = nullptr;
-    SelfTestForm *selfTestForm = nullptr;
-    ChoosecountForm *choosecountform = nullptr;
+    AnswerForm *mAnswerform = nullptr;
+    SelfTestForm *mSelfTestForm = nullptr;
+    ChoosecountForm *mChoosecountForm = nullptr;
 
     void reinit();
 };

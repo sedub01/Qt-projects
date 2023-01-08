@@ -25,17 +25,17 @@ public:
 private:
     Ui::AnswerForm *ui;
 
-    int index;
+    int mCurrentIndex;
     //массив введенных пользователем слов
-    vector<QString> wordArray;
+    vector<QString> mWordArray;
     //массив индексов для избежания повторений
-    vector<int> randomInputs;
+    vector<int> mRandomInputs;
     //массив для заполнения уникальными числами
-    QVector<bool> numz;
+    QVector<bool> mNumz;
     //структура, хранящая абсолютно все переводы из файла
-    QList<std::pair<QString, QString>> dictArray;
-    int random;
-    QMediaPlayer *player;
+    QList<std::pair<QString, QString>> mDictArray;
+    int mRandomIndex;
+    QMediaPlayer *mPlayer;
 
     void inputWords();
     void readFile();
