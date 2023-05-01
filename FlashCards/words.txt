@@ -101,3 +101,27 @@ smuggler - контрабандист
 perceive - воспринимать, чувствовать
 participate - принимать участие
 excuse - извинение, оправдание
+divine - божественный
+fallacy - заблуждение
+refutation - опровержение
+wager - пари, ставка
+denigration - клевета
+outlaw - вне закона
+formidable - грозный, внушительный
+carpenter - плотник
+indeed - действительно
+generalizability - обобщаемость
+attitude - отношение
+constraint - ограничение
+convenience - удобство
+stringent - строгий
+persuasion - убедительность
+setback - неудача
+relentless, ruthless - безжалостный
+bellwether - баран-вожак (с колокольчиком на шее)
+monetary - денежный
+sanctification - освящение
+welfare - благосостояние
+at first glance - на первый взгляд
+rapport - взаимопонимание
+idle - праздный
